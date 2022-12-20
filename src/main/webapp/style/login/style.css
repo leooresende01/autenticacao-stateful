@@ -1,0 +1,9 @@
+@charset "ISO-8859-1";
+
+.form-login {
+	margin: 20px 30%;
+}
+
+.error-mensage {
+	font-size: 11px!important;
+}
