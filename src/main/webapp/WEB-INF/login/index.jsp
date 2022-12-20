@@ -21,16 +21,30 @@
 			<div class="card-body">
 				<form action="/login" method="post">
 					<div class="mb-3">
-						<label for="username" class="form-label">Username</label> <input
-							type="text" class="form-control" id="username"
-							aria-describedby="emailHelp" name="username">
+						<label for="username" class="form-label">Username</label>
+						<div class="input-group has-validation">
+							<span class="input-group-text" id="inputGroupPrepend3">@</span> <input
+								type="text" name="username"
+								class="form-control ${usernameClass }" id="username"
+								aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback"
+								required value="${usernameValue }">
+							<div id="validationServerUsernameFeedback"
+								class="invalid-feedback">${usernameErrosMessage}</div>
+						</div>
 					</div>
 					<div class="mb-3">
-						<label for="exampleInputPassword1" class="form-label">Password</label>
-						<input type="password" class="form-control"
-							id="exampleInputPassword1" name="password">
+						<label for="password" class="form-label">Password</label> <input
+							type="text" name="password"
+							class="form-control ${passwordClass }" id="password"
+							value="${passwordValue }" required>
+						<div class="invalid-feedback">${passwordErrosMessage }</div>
 					</div>
-					<div class="mb-3">Não tem uma conta? <a href="/cadastro">criar conta</a></div>
+					<c:if test="${loginHasErrors}">
+						<p class="mb-2 error-mensage text-danger">Usuario e/ou senha são invalidos</p>
+					</c:if>
+					<div class="mb-3">
+						Não tem uma conta? <a href="/cadastro">criar conta</a>
+					</div>
 					<button type="submit" class="btn btn-primary">Submit</button>
 				</form>
 			</div>

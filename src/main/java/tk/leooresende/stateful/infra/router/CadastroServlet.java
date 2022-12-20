@@ -15,10 +15,10 @@ import tk.leooresende.stateful.infra.handler.CadastroHandler;
 import tk.leooresende.stateful.infra.handler.exception.FormularioInvalidoException;
 import tk.leooresende.stateful.infra.handler.exception.UsernameJaEstaSendoUsadoException;
 import tk.leooresende.stateful.infra.util.UsuarioUtil;
+import tk.leooresende.stateful.infra.util.values.RotasPath;
 
 @WebServlet("/cadastro")
 public class CadastroServlet extends HttpServlet {
-	private static final String LOGIN_PATH = "/login";
 	private static final String FORMULARIO_CADASTRO_USERNAME = "username";
 	private static final String FORMULARIO_CADASTRO_PASSWORD = "password";
 	private static final String FORMULARIO_CADASTRO_NOME_COMPLETO = "nomeCompleto";
@@ -44,7 +44,7 @@ public class CadastroServlet extends HttpServlet {
 		try {
 			UsuarioUtil.validarFormularioDeRegistroDeUsuario(cadastroForm);
 			this.cadastroController.registrarUsuario(req, resp, cadastroForm);
-			resp.sendRedirect(CadastroServlet.LOGIN_PATH);
+			resp.sendRedirect(RotasPath.LOGIN.getPath());
 		} catch (SQLException e) {} 
 		catch (FormularioInvalidoException e) {
 			this.handler.tratarErroDeFormularioVazio(req, resp, e.getListaDeCamposValidados());

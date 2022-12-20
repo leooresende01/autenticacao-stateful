@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import tk.leooresende.stateful.infra.util.values.RotasPath;
+import tk.leooresende.stateful.infra.util.values.SessionAttributes;
+
 @WebFilter(urlPatterns = "/dashboard")
 public class UsuarioNaoAutenticadoFilter implements Filter {
 
@@ -28,13 +31,13 @@ public class UsuarioNaoAutenticadoFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpSession session = httpRequest.getSession();
-		Object usernameUsuarioAutenticado = session.getAttribute("usernameUsuarioAutenticado");
+		Object usernameUsuarioAutenticado = session.getAttribute(SessionAttributes.USERNAME_USUARIO_AUTENTICADO.getValue());
 		if (usernameUsuarioAutenticado != null) {
 			chain.doFilter(request, response);
 			return;
 		}
 		String pathAtual = new URL(httpRequest.getRequestURL().toString()).getPath();
-		((HttpServletResponse) response).sendRedirect("/login?nextUrl=" + pathAtual);
+		((HttpServletResponse) response).sendRedirect(RotasPath.LOGIN.getPath() + "?nextUrl=" + pathAtual);
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import javax.management.RuntimeErrorException;
 
 import tk.leooresende.stateful.infra.handler.exception.UsernameJaEstaSendoUsadoException;
+import tk.leooresende.stateful.infra.handler.exception.UsernameOuSenhaInvalidosException;
 import tk.leooresende.stateful.infra.util.factory.ConnectionDBFatory;
 import tk.leooresende.stateful.infra.util.values.UsuarioTable;
 import tk.leooresende.stateful.model.Usuario;
@@ -39,10 +40,30 @@ public class UsuarioDao {
 			if (retornouAlgumRegistro) {
 				ResultSet resultadoDasConsultas = prepareStatement.getResultSet();
 				return this.pegarUmUnicoUsuarioNoResultadoDaConsulta(resultadoDasConsultas);
-			} else throw new UsernameJaEstaSendoUsadoException();
+			} else
+				throw new UsernameJaEstaSendoUsadoException();
 		} catch (SQLException e) {
 			this.connection.rollback();
-			 throw new UsernameJaEstaSendoUsadoException();
+			throw new UsernameJaEstaSendoUsadoException();
+		}
+	}
+
+	public Usuario findUsuarioByUsername(String username) throws SQLException {
+		try {
+			PreparedStatement consulta = this.connection.prepareStatement("""
+					SELECT * FROM usuarios u WHERE u.username = ?;
+					""");
+			consulta.setString(1, username);
+			boolean encontrouAlgumResultado = consulta.execute();
+			connection.commit();
+			if (encontrouAlgumResultado) {
+				ResultSet resultadoDasConsultas = consulta.getResultSet();
+				return this.pegarUmUnicoUsuarioNoResultadoDaConsulta(resultadoDasConsultas);
+			} else
+				throw new UsernameOuSenhaInvalidosException();
+		} catch (SQLException e) {
+			connection.rollback();
+			throw new UsernameOuSenhaInvalidosException();
 		}
 	}
 

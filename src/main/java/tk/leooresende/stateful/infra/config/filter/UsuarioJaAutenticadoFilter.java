@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import tk.leooresende.stateful.infra.util.values.RotasPath;
+import tk.leooresende.stateful.infra.util.values.SessionAttributes;
+
 @WebFilter(urlPatterns = {"", "/login", "/cadastro"})
 public class UsuarioJaAutenticadoFilter implements Filter {
 
@@ -26,11 +29,11 @@ public class UsuarioJaAutenticadoFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpSession session = ((HttpServletRequest) request).getSession();
-		Object usernameUsuarioAutenticado = session.getAttribute("usernameUsuarioAutenticado");
+		Object usernameUsuarioAutenticado = session.getAttribute(SessionAttributes.USERNAME_USUARIO_AUTENTICADO.getValue());
 		if (usernameUsuarioAutenticado == null) {
 			chain.doFilter(request, response);
 			return;
-		} ((HttpServletResponse) response).sendRedirect("/dashboard");
+		} ((HttpServletResponse) response).sendRedirect(RotasPath.DASHBOARD.getPath());
 	}
 
 	@Override

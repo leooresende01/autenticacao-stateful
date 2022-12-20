@@ -12,22 +12,21 @@ public class UsuarioUtil {
 
 	private static final String CAMPO_NOME_COMPLETO = "nomeCompleto";
 
-	public static void validarFormularioDeRegistroDeUsuario(RegistrarUsuarioForm cadastroForm) {
-		List<CamposValidados> listaDeCamposValidados = Stream.of(cadastroForm.getClass().getDeclaredFields())
-				.map(atributo -> UsuarioUtil.verificarSeOCampoEhValido(atributo, cadastroForm)).toList();
+	public static void validarFormularioDeRegistroDeUsuario(Object form) {
+		List<CamposValidados> listaDeCamposValidados = Stream.of(form.getClass().getDeclaredFields())
+				.map(atributo -> UsuarioUtil.verificarSeOCampoEhValido(atributo, form)).toList();
 		if (listaDeCamposValidados.stream().filter(camposValidados -> camposValidados.temAlgumErro).toList().size() >= 1) {
 			throw new FormularioInvalidoException(listaDeCamposValidados);
-		}
-			
+		}	
 	}
 
-	private static CamposValidados verificarSeOCampoEhValido(Field atributo, RegistrarUsuarioForm cadastroForm) {
+	private static CamposValidados verificarSeOCampoEhValido(Field atributo, Object form) {
 		atributo.setAccessible(true);
 		String nomeDoAtributo = atributo.getName();
 		CamposValidados camposValidados = new CamposValidados(nomeDoAtributo);
 		String valorDoAtributo = null;
 		try {
-			valorDoAtributo = atributo.get(cadastroForm).toString();
+			valorDoAtributo = atributo.get(form).toString();
 			camposValidados.valorAtual = valorDoAtributo;
 		} catch (IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException(e);
